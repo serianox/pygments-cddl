@@ -27,6 +27,7 @@ class CddlLexer(RegexLexer):
             ('"', String, 'string'),
             (r'(h|b64)?\'', String.Hex, 'hstring'),
             (words(('any', 'uint', 'nint', 'int', 'bstr', 'bytes', 'tstr', 'text', 'tdate', 'time', 'number', 'biguint', 'bignint', 'bigint', 'integer', 'unsigned', 'decfrac', 'bigfloat', 'eb64url', 'eb64legacy', 'eb16', 'encoded-cbor', 'uri', 'b64url', 'b64legacy', 'regexp', 'mime-message', 'cbor-any', 'float16', 'float32', 'float64', 'float16-32', 'float32-64', 'float', ), suffix=r'\b'), Keyword.Type),
+            (r'#([0-7](.\d+)?)?', Keyword.Type),
             (words(('false', 'true', 'bool', 'nil', 'null', 'undefined', ), suffix=r'\b'), Keyword.Reserved),
             (words(('.size', '.bits', '.regexp', '.cbor', '.cborseq', '.within', '.and', '.lt', '.le', '.gt', '.ge', '.eq', '.ne', '.default', ), suffix=r'\b'), Keyword),
             (r'[a-zA-Z@_$][a-zA-Z0-9@_$]*([-\.][a-zA-Z0-9@_$]+)*', Name),
@@ -36,7 +37,7 @@ class CddlLexer(RegexLexer):
             (r'0o[0-7]+', Number.Oct),
             (r'0b[0-1]+', Number.Bin),
             (r'\d+', Number.Integer),
-            (r'=>|[/=\?\+\*:~^#&]', Operator),
+            (r'=>|[/=\?\+\*:~^&]', Operator),
             (r'[()\[\]{}<>,.]', Punctuation),
         ],
         'string': [
