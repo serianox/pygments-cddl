@@ -1,0 +1,361 @@
+
+person = {
+  age: int,
+  name: tstr,
+  employer: tstr,
+}
+
+pii = (
+  age: int,
+  name: tstr,
+  employer: tstr,
+)
+
+person = {
+  pii
+}
+
+person = {(
+  age: int,
+  name: tstr,
+  employer: tstr,
+)}
+
+person = {
+  age: int,
+  name: tstr,
+  employer: tstr,
+}
+
+dog = {
+  age: int,
+  name: tstr,
+  leash-length: float,
+}
+
+person = {
+  identity,
+  employer: tstr,
+}
+
+dog = {
+  identity,
+  leash-length: float,
+}
+
+identity = (
+  age: int,
+  name: tstr,
+)
+
+attire = "bow tie" / "necktie" / "Internet attire"
+protocol = 6 / 17
+
+address = { delivery }
+
+delivery = (
+street: tstr, ? number: uint, city //
+po-box: uint, city //
+per-pickup: true )
+
+city = (
+name: tstr, zip-code: uint
+)
+
+
+attire /= "swimwear"
+
+delivery //= (
+lat: float, long: float, drone-type: tstr
+)
+
+device-address = byte
+max-byte = 255
+byte = 0..max-byte ; inclusive range
+first-non-byte = 256
+byte1 = 0...first-non-byte ; byte1 is equivalent to byte
+
+terminal-color = &basecolors
+basecolors = (
+  black: 0, red: 1,  green: 2,  yellow: 3,
+  blue: 4,  magenta: 5,  cyan: 6,  white: 7,
+)
+extended-color = &(
+  basecolors,
+  orange: 8,  pink: 9,  purple: 10,  brown: 11,
+)
+
+my_breakfast = #6.55799(breakfast)   ; cbor-any is too general!
+breakfast = cereal / porridge
+cereal = #6.998(tstr)
+porridge = #6.999([liquid, solid])
+liquid = milk / water
+milk = 0
+water = 1
+solid = tstr
+
+; This is a comment
+person = { g }
+
+g = (
+  "name": tstr,
+  age: int,  ; "age" is a bareword
+)
+
+
+apartment = {
+  kitchen: size,
+  * bedroom: size,
+}
+size = float ; in m2
+
+? bedroom: size,
+
+unlimited-people = [* person]
+one-or-two-people = [1*2 person]
+at-least-two-people = [2* person]
+person = (
+    name: tstr,
+    age: uint,
+)
+
+Geography = [
+  city           : tstr,
+  gpsCoordinates : GpsCoordinates,
+]
+
+GpsCoordinates = {
+  longitude      : uint,            ; degrees, scaled by 10^7
+  latitude       : uint,            ; degreed, scaled by 10^7
+}
+
+located-samples = {
+  sample-point: int,
+  samples: [+ float],
+}
+
+located-samples = {
+  "sample-point" => int,
+  "samples" => [+ float],
+}
+
+located-samples = {
+  sample-point: int,
+  samples: [+ float],
+  * equipment-type => equipment-tolerances,
+}
+equipment-type = [name: tstr, manufacturer: tstr]
+equipment-tolerances = [+ [float, float]]
+
+PersonalData = {
+  ? displayName: tstr,
+  NameComponents,
+  ? age: uint,
+}
+
+NameComponents = (
+  ? firstName: tstr,
+  ? familyName: tstr,
+)
+
+PersonalData = {
+  ? displayName: tstr,
+  NameComponents,
+  ? age: uint,
+  * tstr => any
+}
+
+NameComponents = (
+  ? firstName: tstr,
+  ? familyName: tstr,
+)
+
+square-roots = {* x => y}
+x = int
+y = float
+
+tostring = {* mynumber => tstr}
+mynumber = int / float
+
+labeled-values = {
+  ? fritz: number,
+  * label => value
+}
+label = text
+value = number
+
+do-not-do-this = {
+  int => int,
+  int => 6,
+}
+
+extensible-map-example = {
+  ? "optional-key" => int,
+  * tstr => any
+}
+
+extensible-map-example = {
+  ? "optional-key" ^ => int,
+  * tstr => any
+}
+
+extensible-map-example = {
+  ? "optional-key": int,
+  * tstr => any
+}
+
+extensible-map-example = {
+  ? optional-key: int,
+  * tstr => any
+}
+
+biguint = #6.2(bstr)
+
+buuid = #6.37(bstr)
+
+my_uri = #6.32(tstr) / tstr
+
+basic-header-group = (
+  field1: int,
+  field2: text,
+)
+
+basic-header = [ basic-header-group ]
+
+advanced-header = [
+  basic-header-group,
+  field3: bytes,
+  field4: number, ; as in the tagged type "time"
+]
+
+basic-header = [
+  field1: int,
+  field2: text,
+]
+
+advanced-header = [
+  ~basic-header,
+  field3: bytes,
+  field4: ~time,
+]
+
+
+full-address = [[+ label], ip4, ip6]
+ip4 = bstr .size 4
+ip6 = bstr .size 16
+label = bstr .size (1..63)
+
+audio_sample = uint .size 3 ; 24-bit, equivalent to 0...16777216
+
+tcpflagbytes = bstr .bits flags
+flags = &(
+  fin: 8,
+  syn: 9,
+  rst: 10,
+  psh: 11,
+  ack: 12,
+  urg: 13,
+  ece: 14,
+  cwr: 15,
+  ns: 0,
+) / (4..7) ; data offset bits
+
+rwxbits = uint .bits rwx
+rwx = &(r: 2, w: 1, x: 0)
+
+nai = tstr .regexp "[A-Za-z0-9]+@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)+"
+
+
+message = $message .within message-structure
+message-structure = [message_type, *message_option]
+message_type = 0..255
+message_option = any
+
+$message /= [3, dough: text, topping: [* text]]
+$message /= [4, noodles: text, sauce: text, parmesan: bool]
+
+timer = {
+  time: uint,
+  ? displayed-step: (number .gt 0) .default 1
+}
+
+tcp-header = {seq: uint, ack: uint, * $$tcp-option}
+
+; later, in a different file
+
+$$tcp-option //= (
+sack: [+(left: uint, right: uint)]
+)
+
+; and, maybe in another file
+
+$$tcp-option //= (
+sack-permitted: true
+)
+
+PersonalData = {
+  ? displayName: tstr,
+  NameComponents,
+  ? age: uint,
+  * $$personaldata-extensions
+}
+
+NameComponents = (
+  ? firstName: tstr,
+  ? familyName: tstr,
+)
+
+; The above already works as is.
+; But then, we can add later:
+
+$$personaldata-extensions //= (
+  favorite-salsa: tstr,
+)
+
+; and again, somewhere else:
+
+$$personaldata-extensions //= (
+  shoesize: uint,
+)
+
+messages = message<"reboot", "now"> / message<"sleep", 1..100>
+message<t, v> = {type: t, value: v}
+
+reputation-object = {
+  reputation-context,
+  reputon-list
+}
+
+reputation-context = (
+  application: text
+)
+
+reputon-list = (
+  reputons: reputon-array
+)
+
+reputon-array = [* reputon]
+
+reputon = {
+  rater-value,
+  assertion-value,
+  rated-value,
+  rating-value,
+  ? conf-value,
+  ? normal-value,
+  ? sample-value,
+  ? gen-value,
+  ? expire-value,
+  * ext-value,
+}
+
+rater-value = ( rater: text )
+assertion-value = ( assertion: text )
+rated-value = ( rated: text )
+rating-value = ( rating: float16 )
+conf-value = ( confidence: float16 )
+normal-value = ( normal-rating: float16 )
+sample-value = ( sample-size: uint )
+gen-value = ( generated: uint )
+expire-value = ( expires: uint )
+ext-value = ( text => any )
